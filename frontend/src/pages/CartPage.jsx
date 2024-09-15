@@ -16,7 +16,7 @@ const CartPage = () => {
                             <h2 className="text-xl font-semibold text-gray-800 mb-2">{item.product.name}</h2>
                             <p className="text-gray-600 mb-4">{item.product.description}</p>
                             <div className="flex justify-between items-center">
-                                <p className="text-lg font-bold text-orange-500">${item.product.price}</p>
+                                <p className="text-lg font-bold text-orange-500">₹{item.product.price}</p>
                                 <p className="text-lg text-gray-800">Quantity: {item.quantity}</p>
                             </div>
                             <div className='absolute top-6 right-6 text-red-600 bg-white cursor-pointer border-2 py-1 px-1 rounded-full'

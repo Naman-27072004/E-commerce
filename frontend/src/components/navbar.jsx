@@ -54,12 +54,12 @@ const Navbar = () => {
 
                         <Link to="/cart" className="relative hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <CiShoppingCart size={ 25 } />
-                            <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart.items.length}</div>
+                            <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart?.items.length}</div>
                         </Link>
                         <Link to="/account" className="hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <FaUserCircle size={ 25 } />
                         </Link>
-                        {!user ? (
+                        {user ? (
                             <Link to={''}><MdLogout size={25} /></Link>
                         ):(
                             <div className='border px-3 py-2 rounded-xl bg-red-500 text-white hover:bg-transparent hover:text-black hover:border-red-500'>Login</div>

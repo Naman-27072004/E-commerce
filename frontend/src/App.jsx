@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Signup from './pages/sign_up';
 import Login from './pages/login';
 import Homepage from './pages/homepage';
-import Wishlist from './pages/wishlist';
 import Checkout from './pages/checkout';
 import Account from './pages/account';
 import About from './pages/static/about';
@@ -35,7 +34,6 @@ function App () {
                 <Route path='/login' element={ <Login /> } />
                 <Route path='/products' element={ <ProductsPage /> } />
                 <Route path='/cart' element={ <CartPage /> } />
-                <Route path='/wishlist' element={ <Wishlist /> } />
                 <Route path='/checkout' element={ <Checkout /> } />
                 <Route path='/account' element={ <Account /> } />
                 <Route path='/about' element={ <About /> } />

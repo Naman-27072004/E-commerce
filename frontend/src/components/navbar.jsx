@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
-import { CiSearch, CiHeart, CiShoppingCart } from "react-icons/ci";
+import { CiSearch, CiShoppingCart } from "react-icons/ci";
 import techbazaar from "/assets/techbazaar.png";
 import { FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
 import { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContextProvider';
 import { useCart } from '../context/CartContextProvider';
+import { MdLogout } from 'react-icons/md';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { logout } = useContext(UserContext);
     const { cart } = useCart();
     // console.log(cart)
+    const user = JSON.parse(localStorage.getItem("user"))
     const handleLogout = async () => {
         logout();
         document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -50,9 +52,6 @@ const Navbar = () => {
                             </button>
                         </div>
 
-                        <Link to="/wishlist" className="hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
-                            <CiHeart size={ 25 } />
-                        </Link>
                         <Link to="/cart" className="relative hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <CiShoppingCart size={ 25 } />
                             <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart.items.length}</div>
@@ -60,6 +59,11 @@ const Navbar = () => {
                         <Link to="/account" className="hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <FaUserCircle size={ 25 } />
                         </Link>
+                        {!user ? (
+                            <Link to={''}><MdLogout size={25} /></Link>
+                        ):(
+                            <div className='border px-3 py-2 rounded-xl bg-red-500 text-white hover:bg-transparent hover:text-black hover:border-red-500'>Login</div>
+                        )}
                     </div>
 
                     {/* Hamburger Menu for mobile screens */ }
@@ -99,9 +103,6 @@ const Navbar = () => {
                             </div>
                             
                             <div className='flex items-center justify-between gap-4'>
-                                <Link to="/wishlist" className="hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
-                                    <CiHeart size={ 25 } />
-                                </Link>
                                 <Link to="/cart" className="relative hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                                     <CiShoppingCart size={ 25 } />
                                     <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart.items.length}</div>

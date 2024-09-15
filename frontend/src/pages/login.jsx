@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/UserContextProvider';
 
@@ -197,7 +197,7 @@ const Login = () => {
                             <div className="mt-4">
                                 Don&apos;t have an Account
                                 <span className="px-1 underline underline-offset-2 cursor-pointer font-thin">
-                                    Register Now
+                                    <Link to='/sign_up'>Register Now</Link>
                                 </span>
                             </div>
                         </div>

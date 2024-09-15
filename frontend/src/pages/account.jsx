@@ -1,52 +1,158 @@
-// import { useContext } from "react";
-// import { UserContext } from "../context/UserContextProvider";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { UserContext } from "../context/UserContextProvider";
 
 const Account = () => {
-    // const { user } = useContext(UserContext);
-    const user = JSON.parse(localStorage.getItem("user"))
-    console.log("user",user)
+    const { fetchUserById,  } = useContext(UserContext);
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+
+    const [formData, setFormData] = useState({
+        username: user?.username || '',
+        email: user?.email || '',
+        password: '',
+        new_password: '',
+        Address: user?.Address || '', // Adding fallback value for Address
+    });
+
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null); // To display success messages
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleCancel = () => {
+        setFormData({
+            username: user?.username || '',
+            email: user?.email || '',
+            password: '',
+            new_password: '',
+            Address: user?.Address || ''
+        });
+        setError(null);
+    };
+
+    const handleSave = async () => {
+        // Password match validation
+        if (formData.password && formData.password !== formData.new_password) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        try {
+            // API call to update user profile
+            const response = await axios.put(
+                `http://localhost:8000/api/user/account`, // Replace with your actual API endpoint
+                {
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password ? formData.password : undefined, // Only update if password is entered
+                    Address: formData.Address,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Send token for authentication
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                // Assuming the API response contains updated user data
+                const updatedUser = response.data.user;
+                
+                // Update the local storage with the new user data
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+                fetchUserById()
+
+                setError(null);
+                setSuccess("Profile updated successfully!");
+
+                console.log("User updated successfully", updatedUser);
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            setError("Failed to update profile. Please try again.");
+        }
+    };
+
     return (
         <div className="flex items-left justify-center min-h-screen mt-40 -mb-44">
-            <div>
-                <div className="font-bold text-xl p-1">Manage My Account</div>
-                <div className='ml-6 p-1 flex flex-col gap-1'>
-                    <div>My Profile</div>
-                    <div>Address Book</div>
-                    <div>My Payment Options</div>
-                </div>
-                <div className="font-bold text-xl p-1">My Orders</div>
-                <div className='ml-6 p-1 flex flex-col gap-1'>
-                    <div>My Returns</div>
-                    <div>My Cancellations</div>
-                </div>
-                <div className="font-bold text-xl p-1">My WishList</div>
-            </div>
             <div className="m-1 pl-10 rounded w-1/4">
                 <div className="font-bold text-orange-500 text-2xl">Edit Your Profile</div>
+                
                 <div className="flex flex-col w-full">
-                    Name
-                    <input className="bg-gray-100 my-1 p-1 outline-none rounded" type="text" autoFocus required />
+                    User Name
+                    <input
+                        className="bg-gray-100 my-1 p-1 outline-none rounded"
+                        type="text"
+                        value={formData.username}
+                        name="username"
+                        onChange={handleChange}
+                        autoFocus
+                        required
+                    />
                 </div>
                 <div className="flex flex-col w-full">
                     Email
-                    <input className="bg-gray-100 my-1 p-1 outline-none rounded" type="email" required />
+                    <input
+                        className="bg-gray-100 my-1 p-1 outline-none rounded"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        required
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="flex flex-col w-full">
                     Address
-                    <input className="bg-gray-100 my-1 p-1 outline-none rounded" type="text" />
+                    <input
+                        className="bg-gray-100 my-1 p-1 outline-none rounded"
+                        placeholder="Address"
+                        name="Address"
+                        value={formData.Address}
+                        type="text"
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className="flex flex-col w-full">
                     Change Password
-                    <input className="bg-gray-100 my-1 p-1 outline-none rounded" type="password" placeholder="New password" /><br />
-                    <input className="bg-gray-100 my-1 p-1 outline-none rounded" type="password" placeholder="Confirm password" /><br />
-                    <div className="flex gap-2 justify-end">
-                        <button>Cancel</button>
-                        <button className="bg-orange-500 rounded text-white p-1 m-1">Save changes</button>
+                    <input
+                        className="bg-gray-100 my-1 p-1 outline-none rounded"
+                        type="password"
+                        name="password"
+                        placeholder="New password"
+                        value={formData.password}
+                        onChange={handleChange}
+                    /><br />
+                    <input
+                        className="bg-gray-100 my-1 p-1 outline-none rounded"
+                        type="password"
+                        name="new_password"
+                        value={formData.new_password}
+                        placeholder="Confirm new password"
+                        onChange={handleChange}
+                    />
+                    {error && <div className="text-red-500">{error}</div>}
+                    {success && <div className="text-green-500">{success}</div>}
+                    <div className="flex gap-2 justify-end mt-2">
+                        <button onClick={handleCancel} className="hover:bg-gray-200 rounded p-1">
+                            Cancel
+                        </button>
+                        <button
+                            className="bg-orange-500 rounded text-white p-1 m-1"
+                            onClick={handleSave}
+                        >
+                            Save Changes
+                        </button>
                     </div>  
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Account
+export default Account;

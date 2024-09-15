@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Signup from './pages/sign_up';
 import Login from './pages/login';
 import Homepage from './pages/homepage';
-import Checkout from './pages/checkout';
 import Account from './pages/account';
 import About from './pages/static/about';
 import Contact from './pages/contact';
@@ -12,7 +11,6 @@ import Header from './components/header';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import AnimatedCursor from "react-animated-cursor"
-import Forget from './pages/forget';
 import Privacy from './pages/static/privacy';
 import Refund from './pages/static/refund';
 import Shipping from './pages/static/shipping';
@@ -21,8 +19,6 @@ import Faq from './pages/static/faq';
 import ProductsPage from './pages/products';
 import CartPage from './pages/CartPage';
 function App () {
-
-
     return (
         <BrowserRouter>
             <AnimatedCursor />
@@ -34,12 +30,10 @@ function App () {
                 <Route path='/login' element={ <Login /> } />
                 <Route path='/products' element={ <ProductsPage /> } />
                 <Route path='/cart' element={ <CartPage /> } />
-                <Route path='/checkout' element={ <Checkout /> } />
                 <Route path='/account' element={ <Account /> } />
                 <Route path='/about' element={ <About /> } />
                 <Route path='/contact' element={ <Contact /> } />
                 <Route path='/error' element={ <Error /> } />
-                <Route path='/forget' element={ <Forget /> } />
                 <Route path='/privacy' element={ <Privacy /> } />
                 <Route path='/refund' element={ <Refund /> } />
                 <Route path='/shipping' element={ <Shipping /> } />

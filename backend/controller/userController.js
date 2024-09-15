@@ -13,6 +13,35 @@ const getUser = async(req,res) => {
     }
 }
 
+// Controller to get user by ID
+const getUserById = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the user ID from the request params
+
+        // Find the user by ID in the database
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Return the user data (excluding sensitive information like the password)
+        res.status(200).json({
+            username: user.username,
+            email: user.email,
+            phone: user.phone,
+            message: user.message,
+            isAdmin: user.isAdmin,
+            isPrime: user.isPrime,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+        });
+    } catch (error) {
+        console.error("Error fetching user by ID:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
 // Controller function for user signup
 const signup = async (req, res) => {
     try {
@@ -102,13 +131,7 @@ const login = async (req, res) => {
         // Respond with user data
         res.status(200).json({
             message: 'Login successful!',
-            user: {
-                _id: user._id,
-                username: user.username,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                isPrime: user.isPrime,
-            },
+            user:user,
         });
     } catch (error) {
         console.error('Error during login:', error);
@@ -119,7 +142,7 @@ const login = async (req, res) => {
 const forget = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(req.body)
+        // console.log(req.body)
 
         // Hash the password
         const salt = await bcrypt.genSalt(10);
@@ -142,10 +165,10 @@ const forget = async (req, res) => {
     }
 }
 
-const manage = async (req, res) => {
+const updateAccount = async (req, res) => {
     try {
-        const { email, address, password, name } = req.body;
-        console.log(req.body)
+        const { email, address, password, username } = req.body;
+        // console.log(req.body)
 
         // Hash the password
         const salt = await bcrypt.genSalt(10);
@@ -159,16 +182,37 @@ const manage = async (req, res) => {
         }
 
         // Update the user's password
+        user.username = username;
+        user.email = email;
         user.password = hashedPassword;
         user.address = address;
-        user.name = name;
         await user.save();
 
-        res.json({ message: 'Password updated successfully' });
+        res.json({ message: 'Account update successfully', user:user});
+    } catch (error) {
+        res.status(500).json("internal server error!", error)
+    }
+}
+
+const createContact = async(req,res) => {
+    try {
+        const { email, message} = req.body;
+        // console.log(req.body)
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        user.message.push(message);
+        await user.save();
+
+        res.json({ message: 'success' });
     } catch (error) {
         res.status(500).json("internal server error!", error)
     }
 }
 
 
-module.exports = { signup, login, getUser};
+module.exports = { signup, login, getUserById, getUser, forget, createContact, updateAccount};

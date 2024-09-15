@@ -24,7 +24,6 @@ const Homepage = () => {
     useEffect( () => {
         const fetchProducts = async () => {
             try {
-                console.log( "***********************************" )
                 const response = await axios.get( 'http://localhost:8000/api/products' );
                 setProducts( response.data || [] );
 
@@ -56,7 +55,7 @@ const Homepage = () => {
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">{ product.name }</h2>
                         <p className="text-gray-600 mb-4 truncate">{ product.description }</p>
                         <div className="flex justify-between items-center">
-                            <p className="text-lg font-bold text-orange-500">${ product.price }</p>
+                            <p className="text-lg font-bold text-orange-500">₹{ product.price }</p>
                             <button
                                 className="bg-orange-500 text-white rounded-full px-4 py-2 shadow-md hover:bg-orange-600 transition-colors duration-300"
                                 onClick={ () => addToCart( product._id ) }
@@ -94,7 +93,7 @@ const Homepage = () => {
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">{ product.name }</h2>
                         <p className="text-gray-600 mb-4 truncate">{ product.description }</p>
                         <div className="flex justify-between items-center">
-                            <p className="text-lg font-bold text-orange-500">${ product.price }</p>
+                            <p className="text-lg font-bold text-orange-500">₹{ product.price }</p>
                             <button
                                 className="bg-orange-500 text-white rounded-full px-4 py-2 shadow-md hover:bg-orange-600 transition-colors duration-300"
                                 onClick={ () => addToCart( product._id ) }
@@ -127,7 +126,7 @@ const Homepage = () => {
                                 <p className="text-sm text-gray-500 mt-2">Category: { product?.category }</p>
                                 <p className="text-sm text-gray-500">Brand: { product?.brand }</p>
                                 <div className=" w-full flex justify-between items-center">
-                                    <p className="text-lg font-bold text-orange-500">${ product?.price }</p>
+                                    <p className="text-lg font-bold text-orange-500">₹{ product?.price }</p>
                                     <button
                                         className="bg-orange-500 text-white rounded-full px-4 py-2 shadow-md hover:bg-orange-600 transition-colors duration-300"
                                         onClick={ () => addToCart( product?._id ) }

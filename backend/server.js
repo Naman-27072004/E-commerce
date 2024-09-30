@@ -3,14 +3,10 @@ const app = express();
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require("./config/db");
-const qr = require('qr-image')
 const fs = require('fs')
 const productRoutes = require('./routes/productRoutes')
 const userRoutes = require ('./routes/userRoutes')
 const cartRoutes = require('./routes/cartRoutes')
-
-var qr_svg = qr.image("www.google.com");
-qr_svg.pipe(fs.createWriteStream('qr_image.png'));
 
 //mongodb connection
 connectDB();

@@ -7,8 +7,6 @@ const userSchema = new mongoose.Schema(
         password: { type: String, required: true },
         phone: { type: String },
         message: [ { type: String } ],
-        isAdmin: { type: Boolean, default: false },
-        isPrime: { type: Boolean, default: false },
     },
     {
         timestamps: true,

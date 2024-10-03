@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/UserContextProvider';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const Login = () => {
     const { login } = useContext(UserContext);
@@ -57,12 +58,33 @@ const Login = () => {
                 login(user, token); // Save the token and user data to context
                 setCookie('token', token, 2); // Save the token cookies
                 setCookie('user', user, 2); // Save the user data to cookies
-                navigate('/');
+                
+                // Show success alert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful!',
+                    text: 'Welcome back!',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    navigate('/'); // Navigate to home after success
+                });
+
             } else {
-                console.log("Login failed!");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: 'Please check your credentials and try again.',
+                    confirmButtonText: 'OK'
+                });
             }
         } catch (error) {
-            setError('Login failed. Please try again.');
+            const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
             console.error('Login error:', error);
         } finally {
             setLoading(false);
@@ -75,7 +97,12 @@ const Login = () => {
         setError(null);
 
         if (resetPasswordData.newPassword !== resetPasswordData.confirmPassword) {
-            setError('Passwords do not match.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Password Mismatch',
+                text: 'Please ensure both passwords match.',
+                confirmButtonText: 'OK'
+            });
             setLoading(false);
             return;
         }
@@ -88,18 +115,36 @@ const Login = () => {
 
             if (response.status === 200) {
                 console.log('Password reset successful');
-                setOpenForgetPassword(false);
-                setResetPasswordData({
-                    email: '',
-                    newPassword: '',
-                    confirmPassword: ''
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Password Reset Successful!',
+                    text: 'You can now log in with your new password.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    setOpenForgetPassword(false);
+                    setResetPasswordData({
+                        email: '',
+                        newPassword: '',
+                        confirmPassword: ''
+                    });
+                    navigate('/login'); // Redirect to login
                 });
-                navigate('/login');
             } else {
-                setError('Password reset failed. Please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Reset Failed',
+                    text: 'Please try again later.',
+                    confirmButtonText: 'OK'
+                });
             }
         } catch (error) {
-            setError('An error occurred. Please try again.');
+            const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
             console.error('Password reset error:', error);
         } finally {
             setLoading(false);

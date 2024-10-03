@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -21,14 +22,32 @@ const Signup = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:8000/api/user/signup', formData,{
+            const response = await axios.post('http://localhost:8000/api/user/signup', formData, {
                 withCredentials: true
             });
             console.log('Signup successful!', response.data);
-            navigate('/login');
+            
+            // Show success alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Signup Successful!',
+                text: 'Your account has been created successfully. You can log in now.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate('/login'); // Redirect to login after success
+            });
 
         } catch (error) {
+            const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
             console.error('Signup error:', error);
+            
+            // Show error alert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
         }
     };
 

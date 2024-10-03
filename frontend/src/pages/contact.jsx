@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoCallOutline } from "react-icons/io5";
 import { CiMail } from "react-icons/ci";
 import axios from "axios";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -34,6 +35,16 @@ const Contact = () => {
             // Make the API call to send the message
             await axios.post("http://localhost:8000/api/user/contact", formData);
             setSuccess("Message sent successfully!");
+
+            // Show success alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Message sent successfully!',
+                confirmButtonText: 'OK'
+            });
+
+            // Reset form data
             setFormData({
                 name: "",
                 email: "",
@@ -41,7 +52,16 @@ const Contact = () => {
                 message: "",
             });
         } catch (error) {
-            setError("An error occurred while sending the message.",error);
+            const errorMessage = error.response?.data?.message || 'An error occurred while sending the message.';
+            setError(errorMessage);
+            
+            // Show error alert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
         } finally {
             setLoading(false);
         }

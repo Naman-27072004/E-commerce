@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import { UserContext } from "../context/UserContextProvider";
 
 const Account = () => {
-    const { fetchUserById,  } = useContext(UserContext);
+    const { fetchUserById } = useContext(UserContext);
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
 
@@ -34,6 +35,7 @@ const Account = () => {
             Address: user?.Address || ''
         });
         setError(null);
+        setSuccess(null); // Reset success message
     };
 
     const handleSave = async () => {
@@ -66,16 +68,33 @@ const Account = () => {
                 
                 // Update the local storage with the new user data
                 localStorage.setItem("user", JSON.stringify(updatedUser));
-                fetchUserById()
+                fetchUserById();
 
                 setError(null);
                 setSuccess("Profile updated successfully!");
+
+                // Show success alert
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Profile updated successfully!',
+                    confirmButtonText: 'OK'
+                });
 
                 console.log("User updated successfully", updatedUser);
             }
         } catch (error) {
             console.error("Error updating profile:", error);
-            setError("Failed to update profile. Please try again.");
+            const errorMessage = error.response?.data?.message || 'Failed to update profile. Please try again.';
+            setError(errorMessage);
+
+            // Show error alert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -140,7 +159,7 @@ const Account = () => {
                     {success && <div className="text-green-500">{success}</div>}
                     <div className="flex gap-2 justify-end mt-2">
                         <button onClick={handleCancel} className="hover:bg-gray-200 rounded p-1">
-                            Cancel
+                            Reset
                         </button>
                         <button
                             className="bg-orange-500 rounded text-white p-1 m-1"

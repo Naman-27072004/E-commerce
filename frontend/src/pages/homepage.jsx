@@ -113,10 +113,9 @@ const Homepage = () => {
                 <Link to="/products">
                     <button className="bg-orange-500 rounded text-white p-1">View All Products</button>
                 </Link>
-
             </div>
-            <div className="flex gap-4 w-full max-h-[40rem] mb-10">
-                <div className="w-1/2">
+            <div className="flex gap-4 w-full max-h-[30rem] mb-10">
+                <div className="w-1/2 flex flex-col gap-4">
                     {products && products.slice( 7, 9 ).map( product => (
                         <div key={ product?._id } className="flex justify-between bg-white w-full h-fit p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <img src={ product?.image } alt={ product?.name } className="w-1/2 h-48 object-cover rounded-t-lg " />
@@ -139,12 +138,12 @@ const Homepage = () => {
                         </div>
                     ) ) }
                 </div>
-                { products[ 6 ] && (
-                    <div key={ products[ 6 ]._id } className="relative bg-white w-full h-full p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <img src={ products[ 6 ]?.image } alt={ products[ 6 ]?.name } className=" w-full h-full object-cover rounded-t-lg mb-4" />
-                        <div className="absolute top-1/2 left-[40%]">
-                            <h2 className="text-xl font-bold text-gray-50 mb-2">{ products[ 6 ]?.name }</h2>
-                            <p className="text-gray-600 mb-4 truncate">{ products[ 6 ]?.description }</p>
+                { products[ 2 ] && (
+                    <div key={ products[ 2 ]._id } className="relative bg-white w-1/2 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-l-md">
+                        <img src={ products[ 2 ]?.image } alt={ products[ 2 ]?.name } className=" w-full h-full max-h-[25rem] object-cover rounded-t-lg mb-4" />
+                        <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center bg-gray-700/40 py-4">
+                            <h2 className="text-xl font-bold text-red-500 mb-2">{ products[ 2 ]?.name }</h2>
+                            <div className="text-gray-50 mb-4 truncate w-[20rem]">{ products[ 2 ]?.description }</div>
                         </div>
                     </div>
                 ) }

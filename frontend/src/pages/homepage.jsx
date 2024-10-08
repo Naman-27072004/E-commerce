@@ -26,7 +26,6 @@ const Homepage = () => {
             try {
                 const response = await axios.get( 'http://localhost:8000/api/products' );
                 setProducts( response.data || [] );
-
             } catch ( error ) {
                 console.error( 'Error fetching products:', error );
             }
@@ -35,7 +34,7 @@ const Homepage = () => {
     }, [] );
 
     return (
-        <div className="flex flex-col mb-24">
+        <div className="flex flex-col ">
             {/* Hero section */ }
             <div className="mb-10">
                 <Hero images={ img } />
@@ -46,9 +45,8 @@ const Homepage = () => {
                 <Link to="/products">
                     <button className="bg-orange-500 rounded text-white p-1">View All Products</button>
                 </Link>
-
-            </div>
-            <div className="flex gap-4 max-w-full  overflow-hidden overflow-x-auto mb-10">
+                </div>
+                <div className="flex gap-4 max-w-full  overflow-hidden overflow-x-auto mb-10">
                 {products && products.slice( 0, 6 ).map( product => (
                     <div key={ product._id } className="bg-white min-w-[15rem] min-h-[20rem] p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                         <img src={ product.image } alt={ product.name } className="w-full h-32 object-cover rounded-t-lg mb-4" />
@@ -57,7 +55,7 @@ const Homepage = () => {
                         <div className="flex justify-between items-center">
                             <p className="text-lg font-bold text-orange-500">₹{ product.price }</p>
                             <button
-                                className="bg-orange-500 text-white rounded-full px-4 py-2 shadow-md hover:bg-orange-600 transition-colors duration-300"
+                                className="bg-orange-500 text-white rounded-full px-4 py-2 shadow-md hover:bg-orange-600 transition ease-in-out duration-300 transform hover:scale-110"
                                 onClick={ () => addToCart( product._id ) }
                             >
                                 Add to Cart
@@ -73,11 +71,11 @@ const Homepage = () => {
             <div className="m-1 ">
                 <span className="font-bold text-xl flex flex-col items-center">Browse By Category</span>
                 <div className="flex justify-evenly">
-                    <Link to={ '/products' } className="border rounded p-10 cursor-pointer"><CiMobile2 size={ 50 } />Phones</Link>
-                    <Link to={ '/products' } className="border rounded p-10 cursor-pointer"><FiTablet size={ 50 } />Tablets</Link>
-                    <Link to={ '/products' } className="border rounded p-10 cursor-pointer"><HiOutlineComputerDesktop size={ 50 } />Computers</Link>
-                    <Link to={ '/products' } className="border rounded p-10 cursor-pointer"><CiLaptop size={ 50 } />Laptops</Link>
-                    <Link to={ '/products' } className="border rounded p-10 cursor-pointer"><IoWatchOutline size={ 50 } />Watches</Link>
+                    <Link to={ '/products/mobile phones' } className="border rounded p-10 cursor-pointer"><CiMobile2 size={ 50 } />Phones</Link>
+                    <Link to={ '/products/Tablets' } className="border rounded p-10 cursor-pointer"><FiTablet size={ 50 } />Tablets</Link>
+                    <Link to={ '/products/Desktop' } className="border rounded p-10 cursor-pointer"><HiOutlineComputerDesktop size={ 50 } />Computers</Link>
+                    <Link to={ '/products/Laptops' } className="border rounded p-10 cursor-pointer"><CiLaptop size={ 50 } />Laptops</Link>
+                    <Link to={ '/products/Smart watches' } className="border rounded p-10 cursor-pointer"><IoWatchOutline size={ 50 } />Watches</Link>
                 </div>
             </div>
             <hr className="border-2 border-orange-500 my-10" />
@@ -134,7 +132,6 @@ const Homepage = () => {
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     ) ) }
                 </div>
@@ -147,10 +144,9 @@ const Homepage = () => {
                         </div>
                     </div>
                 ) }
-
             </div>
 
-            <div className="flex justify-evenly">
+            <div className="flex justify-evenly mb-10">
                 <div className="border rounded p-5 m-5">
                     <TbTruckDelivery size={ 50 } className="ml-12" />
                     <span className="font-bold text-xl">FREE AND FAST DELIVERY</span><br />
@@ -167,7 +163,6 @@ const Homepage = () => {
                     We return money with in 30 days
                 </div>
             </div>
-
         </div>
     )
 }

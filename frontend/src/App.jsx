@@ -18,6 +18,7 @@ import Term from './pages/static/term';
 import Faq from './pages/static/faq';
 import ProductsPage from './pages/products';
 import CartPage from './pages/CartPage';
+import ProtectedRoute from './configs/ProtectedRoute';
 function App () {
     return (
         <BrowserRouter>
@@ -25,20 +26,23 @@ function App () {
             <Header />
             <Navbar />
             <Routes>
-                <Route path="/" element={ <Homepage /> } />
-                <Route path='/sign_up' element={ <Signup /> } />
-                <Route path='/login' element={ <Login /> } />
-                <Route path='/products' element={ <ProductsPage /> } />
-                <Route path='/cart' element={ <CartPage /> } />
-                <Route path='/account' element={ <Account /> } />
-                <Route path='/about' element={ <About /> } />
-                <Route path='/contact' element={ <Contact /> } />
-                <Route path='/error' element={ <Error /> } />
-                <Route path='/privacy' element={ <Privacy /> } />
-                <Route path='/refund' element={ <Refund /> } />
-                <Route path='/shipping' element={ <Shipping /> } />
-                <Route path='/term' element={ <Term /> } />
-                <Route path='/faq' element={ <Faq /> } />
+                {/* Public routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/sign_up" element={<Signup />} />
+
+                {/* Protected routes */}
+                <Route path="/" element={<Homepage />} />
+                <Route path='/products' element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+                <Route path='/cart' element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+                <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
+                <Route path='/about' element={<ProtectedRoute><About /></ProtectedRoute>} />
+                <Route path='/contact' element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+                <Route path='/privacy' element={<ProtectedRoute><Privacy /></ProtectedRoute>} />
+                <Route path='/refund' element={<ProtectedRoute><Refund /></ProtectedRoute>} />
+                <Route path='/shipping' element={<ProtectedRoute><Shipping /></ProtectedRoute>} />
+                <Route path='/term' element={<ProtectedRoute><Term /></ProtectedRoute>} />
+                <Route path='/faq' element={<ProtectedRoute><Faq /></ProtectedRoute>} />
+                <Route path='/error' element={<Error />} />
             </Routes>
             <Footer />
         </BrowserRouter>

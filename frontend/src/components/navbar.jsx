@@ -11,13 +11,18 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { logout } = useContext(UserContext);
     const { cart } = useCart();
-    // console.log(cart)
-    const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user")) || null;
+    // console.log(user)
+
     const handleLogout = async () => {
-        logout();
-        document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.reload();
+        try {
+            await logout();
+            document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.reload();
+        } catch (error) {
+            console.error("Failed to logout", error);
+        }
     }
 
     return (
@@ -36,7 +41,7 @@ const Navbar = () => {
                         <Link to="/" className="hover:text-red-500 font-semibold text-lg transition ease-in-out duration-300 transform hover:scale-110">Home</Link>
                         <Link to="/products" className="hover:text-red-500 font-semibold text-lg transition ease-in-out duration-300 transform hover:scale-110">Products</Link>
                         <Link to="/contact" className="hover:text-red-500 font-semibold text-lg transition ease-in-out duration-300 transform hover:scale-110">Contact</Link>
-                        <Link to="/about" className="hover:text-red-500 font-semibold text-lg transition ease-in-out duration-300 transform hover:scale-110">About</Link>
+                        <Link to="/about" className="hover:text-red-500 font-semibold text-lg transition ease-in-out duration-300 transform hover:scale-110">About Us</Link>
                     </div>
 
                     {/* Search and Icons */ }
@@ -54,7 +59,7 @@ const Navbar = () => {
 
                         <Link to="/cart" className="relative hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <CiShoppingCart size={ 25 } />
-                            <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart?.items.length ? cart?.items.length : 0}</div>
+                            <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart?.items?.length || 0}</div>
                         </Link>
                         <Link to="/account" className="hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                             <FaUserCircle size={ 25 } />
@@ -77,13 +82,13 @@ const Navbar = () => {
 
             {/* Mobile Menu */ }
             { isMenuOpen && (
-                <div className="md:hidden">
+                <div className="md:hidden ">
                     <div className="px-2 pb-3 space-y-1 sm:px-3">
-                        <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100">Home</Link>
-                        <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100">Products</Link>
-                        <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100">Contact</Link>
-                        <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100">About</Link>
-                        <div className="flex bg-gray-100 rounded-full p-2">
+                        <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 shadow-sm hover:bg-gray-100">Home</Link>
+                        <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 shadow-sm hover:bg-gray-100">Products</Link>
+                        <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 shadowxl shadow-sm hover:bg-gray-100">Contact</Link>
+                        <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 shadowxl   shadow-sm hover:bg-gray-100">About Us</Link>
+                        <div className="flex items-center justify-between bg-gray-100 rounded-full p-2">
                             <input
                                 className="bg-transparent outline-none text-sm px-2"
                                 type="text"
@@ -99,20 +104,30 @@ const Navbar = () => {
                         <div className="flex items-center justify-between px-4 py-3">
                             <div className="flex items-center">
                                 <FaUserCircle size={ 30 } className="text-gray-600" />
-                                <span className="ml-3 text-gray-800 font-medium">Hey! Ritik</span>
+                                <span className="ml-3 text-gray-800 font-medium">Hey! {user?.username || "Guest"}</span>
                             </div>
                             
                             <div className='flex items-center justify-between gap-4'>
                                 <Link to="/cart" className="relative hover:text-red-500 transition ease-in-out duration-300 transform hover:scale-110">
                                     <CiShoppingCart size={ 25 } />
-                                    <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart.items.length}</div>
+                                    <div className='absolute -top-3 -right-2 rounded-full flex items-center justify-center h-4 w-4 bg-red-500 text-white'>{cart?.items?.length || 0}</div>
                                 </Link>
-                                <button
-                                    onClick={ handleLogout }
-                                    className="px-4 py-2 bg-gray-600 text-white rounded-md"
-                                >
-                                    Logout
-                                </button>
+                                {user ? (
+                                    <button
+                                        onClick={ handleLogout }
+                                        className="px-4 py-2 bg-gray-600 text-white rounded-md"
+                                    >
+                                        Logout
+                                    </button>
+                                ): (
+                                    <Link 
+                                        to={'/login'}
+                                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                        className="px-4 py-2 bg-gray-600 text-white rounded-md"
+                                    >
+                                        Login
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

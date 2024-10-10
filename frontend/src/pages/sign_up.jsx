@@ -18,15 +18,44 @@ const Signup = () => {
         });
     };
 
+    // Function to check for weak passwords
+    const isWeakPassword = (password) => {
+        // Criteria for a strong password
+        const minLength = 8;
+        const hasNumber = /\d/; // Checks if there is a number
+        const hasLetter = /[a-zA-Z]/; // Checks if there is a letter
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/; // Checks for special characters
+
+        if (password.length < minLength || 
+            !hasNumber.test(password) || 
+            !hasLetter.test(password) || 
+            !hasSpecialChar.test(password)) {
+            return true; // Password is weak
+        }
+        return false; // Password is strong
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if the password is weak
+        if (isWeakPassword(formData.password)) {
+            // Show warning alert if the password is weak
+            Swal.fire({
+                icon: 'warning',
+                title: 'Weak Password',
+                text: 'Your password must be at least 8 characters long, include numbers, letters, and special characters.',
+                confirmButtonText: 'OK'
+            });
+            return; // Stop submission if password is weak
+        }
 
         try {
             const response = await axios.post('http://localhost:8000/api/user/signup', formData, {
                 withCredentials: true
             });
             console.log('Signup successful!', response.data);
-            
+
             // Show success alert
             Swal.fire({
                 icon: 'success',
